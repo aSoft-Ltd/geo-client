@@ -19,6 +19,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(libs.geo.addresses)
+                api(libs.geo.coordinates)
                 api(libs.symphony.input.core)
                 api(libs.symphony.input.choice)
                 api(libs.symphony.input.text)
