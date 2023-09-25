@@ -4,7 +4,7 @@ plugins {
     id("tz.co.asoft.library")
 }
 
-description = "A kotlin multiplatform library for headless input location fields"
+description = "A kotlin multiplatform library for headless input address fields and other goe components"
 
 kotlin {
     jvm { library() }
