@@ -5,6 +5,7 @@ import kollections.List
 import kollections.toIList
 import symphony.BaseField
 import symphony.TextField
+import symphony.Visibilities
 import symphony.Visibility
 
 class AddressManager {
@@ -16,7 +17,7 @@ class AddressManager {
             TextField(
                 name = ::surrogate,
                 label = it,
-                visibility = Visibility.Visible,
+                visibility = Visibilities.Visible,
                 hint = it
             )
         }.toIList()

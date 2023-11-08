@@ -22,6 +22,7 @@ import symphony.internal.BaseFieldImpl
 import symphony.toErrors
 import symphony.toWarnings
 import kotlin.reflect.KMutableProperty0
+import symphony.internal.BaseFieldImplState
 
 @PublishedApi
 internal class AddressFieldImpl(
@@ -65,7 +66,7 @@ internal class AddressFieldImpl(
         onChange?.invoke(property.get())
     }
 
-    private val initial = BaseFieldImpl.State(
+    private val initial = BaseFieldImplState(
         name = property.name,
         label = Label(label, this.validator.required),
         hint = hint,

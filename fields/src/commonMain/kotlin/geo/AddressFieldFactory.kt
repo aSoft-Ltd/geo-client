@@ -6,11 +6,12 @@ import symphony.Changer
 import symphony.Fields
 import symphony.Visibility
 import kotlin.reflect.KMutableProperty0
+import symphony.Visibilities
 
 fun AddressField(
     name: KMutableProperty0<AddressOutput?>,
     label: String = name.name,
-    visibility: Visibility = Visibility.Visible,
+    visibility: Visibility = Visibilities.Visible,
     hint: String = "Address",
     onChange: Changer<AddressOutput>? = null,
     factory: ValidationFactory<AddressOutput>? = null
@@ -19,7 +20,7 @@ fun AddressField(
 fun Fields<Any>.address(
     name: KMutableProperty0<AddressOutput?>,
     label: String = name.name,
-    visibility: Visibility = Visibility.Visible,
+    visibility: Visibility = Visibilities.Visible,
     hint: String = label,
     onChange: Changer<AddressOutput>? = null,
     factory: ValidationFactory<AddressOutput>? = null

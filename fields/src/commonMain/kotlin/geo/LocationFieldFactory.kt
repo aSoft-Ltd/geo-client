@@ -6,13 +6,14 @@ import symphony.Fields
 import symphony.Visibility
 import geo.internal.LocationFieldImpl
 import kotlin.reflect.KMutableProperty0
+import symphony.Visibilities
 
 fun Fields<*>.location(
     name: KMutableProperty0<GeoLocation?>,
     provider: LocationProvider = GoogleLocationProvider,
     label: String = name.name,
     hint: String = label,
-    visibility: Visibility = Visibility.Visible,
+    visibility: Visibility = Visibilities.Visible,
     onChange: Changer<GeoLocation>? = null,
     factory: ValidationFactory<GeoLocation>? = null
 ): LocationField = getOrCreate(name) {
