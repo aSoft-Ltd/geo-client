@@ -15,7 +15,7 @@ fun AddressField(
     hint: String = "Address",
     onChange: Changer<AddressOutput>? = null,
     factory: ValidationFactory<AddressOutput>? = null
-): AddressField = AddressFieldImpl(name, label, visibility, hint, onChange, factory)
+): AddressField = AddressFieldImpl(name, LameAddressManager(),label, visibility, hint, onChange, factory)
 
 fun Fields<Any>.address(
     name: KMutableProperty0<AddressOutput?>,
@@ -25,5 +25,5 @@ fun Fields<Any>.address(
     onChange: Changer<AddressOutput>? = null,
     factory: ValidationFactory<AddressOutput>? = null
 ): AddressField = getOrCreate(property = name) {
-    AddressFieldImpl(name, label, visibility, hint, onChange, factory)
+    AddressFieldImpl(name, LameAddressManager(), label, visibility, hint, onChange, factory)
 }

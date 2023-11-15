@@ -7,6 +7,7 @@ import geo.AddressOutput
 import geo.Country
 import geo.matches
 import kollections.iEmptyList
+import kollections.toIList
 import neat.ValidationFactory
 import neat.Validity
 import neat.custom
@@ -27,6 +28,7 @@ import symphony.internal.BaseFieldImplState
 @PublishedApi
 internal class AddressFieldImpl(
     private val property: KMutableProperty0<AddressOutput?>,
+    private val manager: AddressManager,
     label: String,
     visibility: Visibility,
     hint: String,
@@ -36,8 +38,6 @@ internal class AddressFieldImpl(
 
     private var _country = property.get()?.country
 
-    private var manager = AddressManager()
-
     override val country by lazy {
         SingleChoiceField(
             name = ::_country,
@@ -46,7 +46,7 @@ internal class AddressFieldImpl(
             filter = { country, key -> country.matches(key) },
             onChange = {
                 val out = state.value.output ?: AddressOutput(null, iEmptyList())
-                set(out.copy(country = it, entries = manager.entries(it)))
+                set(out.copy(country = it, entries = manager.entries(it).toIList()))
             }
         )
     }
