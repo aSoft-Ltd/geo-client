@@ -9,10 +9,6 @@ import symphony.TextField
 fun AddressDto?.toOutput() = AddressOutput(
     country = this?.country,
     entries = this?.entries?.map {
-        TextField(
-            name = it.label,
-            label = it.label,
-            hint = it.label
-        )
+        TextField(name = it.label, value = it.value)
     }?.toIList() ?: iEmptyList()
 )

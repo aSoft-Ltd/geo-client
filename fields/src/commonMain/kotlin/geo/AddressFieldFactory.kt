@@ -7,23 +7,26 @@ import symphony.Fields
 import symphony.Visibility
 import kotlin.reflect.KMutableProperty0
 import symphony.Visibilities
+import symphony.internal.FieldBacker
 
 fun AddressField(
-    name: KMutableProperty0<AddressOutput?>,
-    label: String = name.name,
+    name: String = "",
+    label: String = name,
     visibility: Visibility = Visibilities.Visible,
     hint: String = "Address",
+    value: AddressPresenter? = null,
     onChange: Changer<AddressOutput>? = null,
     factory: ValidationFactory<AddressOutput>? = null
-): AddressField = AddressFieldImpl(name, LameAddressManager(),label, visibility, hint, onChange, factory)
+): AddressField = AddressFieldImpl(FieldBacker.Name(name), LameAddressManager(), value, label, visibility, hint, onChange, factory)
 
 fun Fields<Any>.address(
     name: KMutableProperty0<AddressOutput?>,
     label: String = name.name,
     visibility: Visibility = Visibilities.Visible,
     hint: String = label,
+    value: AddressPresenter? = null,
     onChange: Changer<AddressOutput>? = null,
     factory: ValidationFactory<AddressOutput>? = null
 ): AddressField = getOrCreate(property = name) {
-    AddressFieldImpl(name, LameAddressManager(), label, visibility, hint, onChange, factory)
+    AddressFieldImpl(FieldBacker.Prop(name), LameAddressManager(), value, label, visibility, hint, onChange, factory)
 }

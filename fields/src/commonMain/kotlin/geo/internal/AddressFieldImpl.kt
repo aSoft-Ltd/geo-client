@@ -4,14 +4,17 @@ import cinematic.mutableLiveOf
 import geo.AddressField
 import geo.AddressManager
 import geo.AddressOutput
+import geo.AddressPresenter
 import geo.Country
 import geo.matches
+import geo.transformers.toOutput
 import kollections.iEmptyList
 import kollections.toIList
 import neat.ValidationFactory
 import neat.Validity
 import neat.custom
 import neat.required
+import symphony.BaseField
 import symphony.Changer
 import symphony.Feedbacks
 import symphony.Label
@@ -19,16 +22,16 @@ import symphony.Option
 import symphony.SingleChoiceField
 import symphony.Visibility
 import symphony.internal.AbstractHideable
-import symphony.internal.BaseFieldImpl
+import symphony.internal.BaseFieldImplState
+import symphony.internal.FieldBacker
 import symphony.toErrors
 import symphony.toWarnings
-import kotlin.reflect.KMutableProperty0
-import symphony.internal.BaseFieldImplState
 
 @PublishedApi
 internal class AddressFieldImpl(
-    private val property: KMutableProperty0<AddressOutput?>,
+    private val backer: FieldBacker<AddressOutput>,
     private val manager: AddressManager,
+    private val value: AddressPresenter?,
     label: String,
     visibility: Visibility,
     hint: String,
@@ -36,19 +39,31 @@ internal class AddressFieldImpl(
     factory: ValidationFactory<AddressOutput>?
 ) : AbstractHideable(), AddressField {
 
-    private var _country = property.get()?.country
-
     override val country by lazy {
         SingleChoiceField(
-            name = ::_country,
-            items = Country.values().toList(),
+            name = "country",
+            label = "Select Country",
+            items = Country.entries.toList(),
             mapper = { Option(label = it.label, value = it.name) },
             filter = { country, key -> country.matches(key) },
-            onChange = {
+            value = value?.country ?: backer.asProp?.get()?.country,
+            onChange = { country ->
                 val out = state.value.output ?: AddressOutput(null, iEmptyList())
-                set(out.copy(country = it, entries = manager.entries(it).toIList()))
+                val entries = manager.entries(country).onEach { it.smoothUpdate() }
+                set(out.copy(country = country, entries = entries.toIList()))
             }
         )
+    }
+
+    private fun BaseField<String>.smoothUpdate() {
+        val existing = this@AddressFieldImpl.state.value.output?.entries?.find { it.label.text == label.text }?.output
+        if (!existing.isNullOrBlank()) return set(existing)
+
+        val default = value?.entries?.find { it.label == label.text }?.value
+        if (!default.isNullOrBlank()) return set(default)
+
+        val prop = backer.asProp?.get()?.entries?.find { it.label.text == label.text }?.output
+        if (!prop.isNullOrBlank()) return set(prop)
     }
 
     override val entries get() = state.value.output?.entries ?: iEmptyList()
@@ -58,20 +73,20 @@ internal class AddressFieldImpl(
     override fun set(value: AddressOutput?) {
         val res = validator.validate(value)
         val output = res.value
-        property.set(output)
+        backer.asProp?.set(output)
         state.value = state.value.copy(
-            output = property.get(),
+            output = output,
             feedbacks = Feedbacks(res.toWarnings())
         )
-        onChange?.invoke(property.get())
+        onChange?.invoke(output)
     }
 
     private val initial = BaseFieldImplState(
-        name = property.name,
+        name = backer.name,
         label = Label(label, this.validator.required),
         hint = hint,
         required = this.validator.required,
-        output = property.get(),
+        output = value?.src?.toOutput() ?: backer.asProp?.get(),
         visibility = visibility,
         feedbacks = Feedbacks(iEmptyList()),
     )
