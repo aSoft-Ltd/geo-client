@@ -2,7 +2,7 @@
 
 package geo
 
-import kollections.JsExport
+import kotlinx.JsExport
 import geo.internal.GooglePlacesApiParser
 
 object GoogleLocationProvider : LocationProvider {

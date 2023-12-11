@@ -6,7 +6,7 @@ package geo
 import kollections.List
 import symphony.BaseField
 import symphony.SingleChoiceField
-import kotlin.js.JsExport
+import kotlinx.JsExport
 
 interface AddressField : BaseField<AddressOutput> {
     val country: SingleChoiceField<Country>
