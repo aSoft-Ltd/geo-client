@@ -1,5 +1,6 @@
 package geo
 
+import kollections.listOf
 class DiscreteAddressManager : AbstractAddressManager() {
 
     override fun labels(country: Country) = when (country) {

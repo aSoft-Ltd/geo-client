@@ -1,5 +1,6 @@
 package geo
 
+import kollections.listOf
 class LameAddressManager : AbstractAddressManager() {
 
     override fun labels(country: Country) = when (country) {

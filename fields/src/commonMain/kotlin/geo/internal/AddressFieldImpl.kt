@@ -8,8 +8,11 @@ import geo.AddressPresenter
 import geo.Country
 import geo.matches
 import geo.transformers.toOutput
-import kollections.iEmptyList
-import kollections.toIList
+import kollections.emptyList
+import kollections.toList
+import kollections.find
+import kollections.isNotEmpty
+import kollections.onEach
 import neat.ValidationFactory
 import neat.Validity
 import neat.custom
@@ -48,9 +51,9 @@ internal class AddressFieldImpl(
             filter = { country, key -> country.matches(key) },
             value = value?.country ?: backer.asProp?.get()?.country,
             onChange = { country ->
-                val out = state.value.output ?: AddressOutput(null, iEmptyList())
+                val out = state.value.output ?: AddressOutput(null, emptyList())
                 val entries = manager.entries(country).onEach { it.smoothUpdate() }
-                set(out.copy(country = country, entries = entries.toIList()))
+                set(out.copy(country = country, entries = entries))
             }
         )
     }
@@ -66,7 +69,7 @@ internal class AddressFieldImpl(
         if (!prop.isNullOrBlank()) return set(prop)
     }
 
-    override val entries get() = state.value.output?.entries ?: iEmptyList()
+    override val entries get() = state.value.output?.entries ?: emptyList()
 
     protected val validator = custom<AddressOutput>(label).configure(factory)
 
@@ -88,7 +91,7 @@ internal class AddressFieldImpl(
         required = this.validator.required,
         output = value?.src?.toOutput() ?: backer.asProp?.get(),
         visibility = visibility,
-        feedbacks = Feedbacks(iEmptyList()),
+        feedbacks = Feedbacks(emptyList()),
     )
 
     override val state = mutableLiveOf(initial)

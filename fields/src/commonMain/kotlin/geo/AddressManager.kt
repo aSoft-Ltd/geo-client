@@ -1,6 +1,7 @@
 package geo
 
 import symphony.BaseField
+import kollections.List
 
 interface AddressManager {
 

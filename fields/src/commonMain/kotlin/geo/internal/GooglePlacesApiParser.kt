@@ -2,7 +2,7 @@ package geo.internal
 
 import geo.Country
 import geo.GeoLocation
-import kollections.toIList
+import kollections.toList
 import kotlinx.serialization.json.Json
 
 class GooglePlacesApiParser {
@@ -32,7 +32,7 @@ class GooglePlacesApiParser {
         } ?: throw IllegalArgumentException("Failed to parse country ${countryKey.long_name}(${countryKey.short_name})")
 
         return GeoLocation(
-            lines = resp.description.split(", ").toIList(),
+            lines = resp.description.split(", ").toList(),
             country = country,
             cords = resp.geometry.location,
             code = postalCode?.long_name
