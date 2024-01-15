@@ -46,7 +46,7 @@ internal class AddressFieldImpl(
         SingleChoiceField(
             name = "country",
             label = "Select Country",
-            items = Country.entries.toList(),
+            items = Country.values().toList(),
             mapper = { Option(label = it.label, value = it.name) },
             filter = { country, key -> country.matches(key) },
             value = value?.country ?: backer.asProp?.get()?.country,
